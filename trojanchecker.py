@@ -8,8 +8,10 @@ import requests
 import json
 from twilio.rest import Client
 
+#starts timer to tell how long it took at the end
 start = time.time()
 
+#opens a chrome browser without the gui
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument("--headless")
 chrome_options.add_argument("--disable-gpu")
@@ -26,6 +28,7 @@ usc_pass = base64.b64decode(usc_pass).decode("utf-8") #b64 hashed to prevent sho
 phone_number = '+1 ENTER YOUR PHONE NUMBER INCLUDE +1 IF AMERICAN (+14049238493)'
 chrome_path = 'INPUT PATH TO CHROMEDRIVER IN DIRECTORY'
 
+#constant xpaths for the elements on the trojancheck site. allows you to id the buttons and boxes
 adv_xpath = '/html/body/app-root/app-login/main/section/div/div[1]/div/div[1]/button'
 user_xpath = ' //*[@id="username"]'
 pass_xpath = ' //*[@id="password"]'
@@ -47,10 +50,12 @@ submit2_xpath = '/html/body/app-root/app-assessment-questions/main/section/secti
 check_xpath = '//*[@id="mat-checkbox-1"]/label/div'
 submit3_xpath = '/html/body/app-root/app-assessment-review/main/section/section[11]/button'
 
+#makes the window the size of the average phone
 driver = webdriver.Chrome(options=chrome_options)
 driver.set_window_size(376, 812)
 #driver = webdriver.Chrome(chrome_path)
 
+#goes to trojancheck site and signs in
 driver.get(trojancheckurl)
 time.sleep(2)
 driver.find_element_by_xpath(adv_xpath).click() #go to sso
@@ -62,16 +67,19 @@ time.sleep(2)
 driver.find_element_by_xpath(adv2_xpath).click()
 time.sleep(2)
 
+#first page after signin
 driver.find_element_by_xpath(onexpath).click()
 time.sleep(2)
 driver.find_element_by_xpath(twoxpath).click()
 time.sleep(2)
 
+#second page after signin, starts to ask about covid
 driver.find_element_by_xpath(no1_xpath).click()
 driver.find_element_by_xpath(no2_xpath).click()
 driver.find_element_by_xpath(submit1_xpath).click()
 time.sleep(2)
 
+#third page after signin, asks about symptoms
 driver.find_element_by_xpath(no3_xpath).click()
 driver.find_element_by_xpath(no4_xpath).click()
 driver.find_element_by_xpath(no5_xpath).click()
@@ -82,16 +90,18 @@ driver.find_element_by_xpath(no9_xpath).click()
 driver.find_element_by_xpath(submit2_xpath).click()
 time.sleep(2)
 
+#fourth page after signin, asks if you were telling the truth and to verify answers
 driver.find_element_by_xpath(check_xpath).click()
 driver.find_element_by_xpath(submit3_xpath).click()
 time.sleep(2)
 
+#scrolls down to the part you want to see, the qr code and color
 for i in range(14): #10 with window 13 headless
-    driver.find_element_by_tag_name("html").send_keys(Keys.DOWN) #scroll down a little bit
+    driver.find_element_by_tag_name("html").send_keys(Keys.DOWN)
 driver.save_screenshot('trojancheck.png')
 time.sleep(1)
 
-#base64 and upload image
+#base64 encodes and upload image to public site, saves image url
 with open("trojancheck.png", "rb") as file:
     url = "https://api.imgbb.com/1/upload"
     payload = {
@@ -102,7 +112,7 @@ with open("trojancheck.png", "rb") as file:
     objj = res.json()
 image_link = objj["data"]["url"]
 
-#text it to me
+#texts the image (which will show up as image and not just link)
 account_sid = 'TWILIO ACCOUNTSID'
 auth_token = 'TWILIO AUTHTOKEN'
 client = Client(account_sid, auth_token)
