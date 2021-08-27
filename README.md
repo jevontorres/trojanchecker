@@ -20,6 +20,8 @@ pip install twilio
 ```
 
 ## Usage
+Make a file in directory called users.txt with format "username password phonenumber" separate each word with a space and each user with a new line. **PHONE NUMBER MUST BE WITH COUNTRY CODE** i.e +1. 
+
 In the trojanchecke(r/d).py, edit anything marked to be changed. This includes, your USC username and password (base64 encoded), your phone number, directory path to chromedriver, imgbb API keys, and twilio account SID and auth token. These were removed for obvious security reasons.
 
 To complete the check and recieve a text with the code and color, run checker.
