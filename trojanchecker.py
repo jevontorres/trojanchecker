@@ -115,6 +115,6 @@ def checker(user,passcode,pnumber):
 with open('users.txt','r') as file:
     for line in file:
         creds = line.split()
-        checked(creds[0],creds[1],creds[2])
+        checker(creds[0],creds[1],creds[2])
 end = time.time()
 print("SENT, took",end-start,"seconds")
